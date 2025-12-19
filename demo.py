@@ -17,7 +17,10 @@ def main():
   }
 
   lookback : Float = 10.
+  # logret : Signal<Float> = log(divide(dividend=close, divisor=open))
+  # covmat : Matrix<Float> = covariance(returns = logret, lookback = 20)
   result : Signal<Float> = dynamic_ma(signal=close, lookback=lookback, multiplier=volume_level)
+  # result : Signal<Float> = diffuse(signal =signal, distance_matrix=cov2dist(covariance_matrix = covmat) ) 
   """
 
   # 1. Lex & Parse

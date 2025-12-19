@@ -37,6 +37,14 @@ STD_LIB = {
         Generic("Signal", Atomic("Float"))
     ),
 
+    "covariance": Operator(
+        DictType({
+            "returns": Generic("Signal", Atomic("Float")),
+            "lookback": Atomic("Int")
+        }),
+        Generic("Matrix", Atomic("Float"))
+    ),
+
 }
 
 
@@ -107,12 +115,12 @@ class STD_LIB_IMPL:
                 return result
             elif type(period) == np.ndarray:
                 assert signal.shape == period.shape
-                for di in range(n):
-                    for ii in range(p):
-                        lb = np.nan_to_num(np.round(period[di,ii]), nan=0, posinf=0, neginf=0).astype(int)
-                        di1, di2 = di-lb+1, di+1
-                        if 0<lb and 0<di1:
-                            result[di, ii] = np.mean(signal[di1:di2, ii])
+                lookback = np.round(period).clip(min=0, max=n+1)
+                lookback = np.nan_to_num(lookback, nan=0, posinf=0, neginf=0).astype(int)
+                lbs = [int(x) for x in np.unique(lookback)]
+                for lb in lbs :
+                    mask = lookback == lb
+                    result[mask] = self._compute(signal, lb)[mask]
                 return result
             else:
                 raise Exception
@@ -131,3 +139,15 @@ class STD_LIB_IMPL:
 
         def _compute(self, baseline, multiplier):
             return baseline * multiplier
+    
+    class covariance(Node):
+        # TODO: shrinkage or regularization, neutralization, sector information etc.
+        def __init__(self, returns, lookback):
+            self.returns, self.lookback = returns, lookback
+
+        def _compute(self, returns, lookback):
+            n, p = returns.shape
+            result = np.full((n,p,p), np.nan, dtype=float)
+            for t in range(lookback,n):
+                result[t] = np.cov(returns[t-lookback: t+1], rowvar=False)
+            return result
