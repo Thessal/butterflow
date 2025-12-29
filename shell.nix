@@ -38,6 +38,7 @@ in pkgs.mkShell {
     pythonEnv
     butterflowPackage
     pkgs.uv
+    python.pkgs.pytest
     ]; 
 }
 
