@@ -1,0 +1,11 @@
+[Operator specifiation for ts_ffill]
+1. Type signature
+ts_ffill: Signal<Float> (signal: Signal<Float>, period: Int)
+2. Arguments
+signal: Input signal.
+period: Lookback window. Integer greater than 1.
+3. Semantic Definition
+Forward-fills NaN value by given period.
+4. Example
+last_earnings = ts_ffill(signal=earnings, period=64)
+eps = divide(dividend=last_earnings, divisor=sharesout)

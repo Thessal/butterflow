@@ -1,0 +1,10 @@
+[Operator specifiation for cs_zscore]
+1. Type signature
+cs_zscore: Signal<Float> (signal: Signal<Float>)
+2. Arguments
+signal: Input signal.
+3. Semantic Definition
+Normalizes the signal by measuring the deviation from the distribution for each day.
+4. Example
+price_level = ts_rank(signal=close, period=252)
+relative_price_level = cs_zscore(signal=price_chg)

@@ -1,0 +1,14 @@
+[Operator specifiation for ts_mean]
+1. Type signature
+ts_mean: Signal<Float> (signal: Signal<Float>, period: Int)
+ts_mean: Signal<Float> (signal: Signal<Float>, period: Signal<Float>)
+2. Arguments
+signal: Unsmoothed input signal.
+period: Smoothing window. Positive value. Dynamic window is used when the type of period is a Signal. 
+3. Semantic Definition 
+Apply moving average to the input signal by averaging adjacent datapoints.
+The long-term trends of the resulting signal have less noise.
+Turnover can be controlled.
+4. Example
+illiquidity = add(x=cs_rank(signal=multiply(x=volume, y=-1.0)), y=1.0)
+price_trend = ts_mean(signal=alpha, period=illiquidity)

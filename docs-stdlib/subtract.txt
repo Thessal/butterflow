@@ -1,0 +1,12 @@
+[Operator specifiation for subtract]
+1. Type signature
+subtract: Signal<Float> (x: Signal<Float>, y: Signal<Float>)
+subtract: Signal<Float> (x: Signal<Float>, y: Float)
+2. Arguments
+x: Input signal.
+y: Input signal or a floating point number literal
+3. Semantic Definition
+Subtracts y from x.
+4. Example
+returns = divide(dividend=subtract(x=close, y=open), divisor=close)
+size_factor = subtract(x=rank(signal=cap), y=0.5)

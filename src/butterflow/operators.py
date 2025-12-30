@@ -3,6 +3,8 @@ import numpy as np
 import scipy
 from bisect import bisect_left, bisect_right, insort
 
+# TODO: argminmax / group
+
 # --- Define the Type Environment (The Rules) ---
 # Function signatures
 # Mapping function names to their Operator signatures based on your input
@@ -75,11 +77,10 @@ STD_LIB = {
         Generic("Signal", Atomic("Float"))
     ),
 
-
     "add": Operator(
         DictType({
             "x": Generic("Signal", Atomic("Float")),
-            "y": Generic("Signal", Atomic("Float")),
+            "y": Either([Generic("Signal", Atomic("Float")), Atomic("Float")]),
         }),
         Generic("Signal", Atomic("Float"))
     ),
@@ -87,7 +88,7 @@ STD_LIB = {
     "subtract": Operator(
         DictType({
             "x": Generic("Signal", Atomic("Float")),
-            "y": Generic("Signal", Atomic("Float")),
+            "y": Either([Generic("Signal", Atomic("Float")), Atomic("Float")]),
         }),
         Generic("Signal", Atomic("Float"))
     ),
@@ -95,7 +96,7 @@ STD_LIB = {
     "divide": Operator(
         DictType({
             "dividend": Generic("Signal", Atomic("Float")),
-            "divisor":  Generic("Signal", Atomic("Float"))
+            "divisor": Either([Generic("Signal", Atomic("Float")), Atomic("Float")]),
         }),
         Generic("Signal", Atomic("Float"))
     ),

@@ -1,0 +1,14 @@
+[Operator specifiation for add]
+1. Type signature
+add: Signal<Float> (x: Signal<Float>, y: Signal<Float>)
+add: Signal<Float> (x: Signal<Float>, y: Float)
+2. Arguments
+x: Input signal.
+y: Input signal or a floating point number literal
+3. Semantic Definition
+Adds x and y.
+Information can be collected by adding two signal with same scale.
+Adding constant to the divisor makes division stable.
+4. Example
+mid = add(x=open, y=close)
+size_factor = divide(dividend=volume, divisor=add(x=adv20, y=1.))

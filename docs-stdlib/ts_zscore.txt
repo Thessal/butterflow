@@ -1,0 +1,11 @@
+[Operator specifiation for ts_zscore]
+1. Type signature
+ts_zscore: Signal<Float> (signal: Signal<Float>, period: Int)
+2. Arguments
+signal: Input signal.
+period: Lookback window. Integer greater than 1.
+3. Semantic Definition 
+Normalizes the signal by measuring the deviation from historical distribution.
+4. Example
+price_level = ts_zscore(signal=close, period=5)
+reversion = multiply(x=price_level, y=-1.0)

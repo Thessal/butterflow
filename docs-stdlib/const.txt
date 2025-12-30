@@ -1,0 +1,11 @@
+[Operator specifiation for const]
+1. Type signature
+const: Signal<Float> (value: Float)
+2. Arguments
+value: Finite floating-point number literal
+3. Semantic Definition 
+Casts single constant value into a dataframe.
+y_{t,i} = v \quad \forall t, i
+4. Example
+minimal = const(value=1.0)
+scaled_close = multiply(x=data(id="close"), y=0.5)

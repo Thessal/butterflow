@@ -1,0 +1,2 @@
+[Data specifiation for close]
+Close price

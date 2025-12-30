@@ -1,0 +1,11 @@
+[Operator specifiation for cs_rank]
+1. Type signature
+cs_rank: Signal<Float> (signal: Signal<Float>)
+2. Arguments
+signal: Input signal.
+3. Semantic Definition
+Scales the signal from 0 to 1, by comparing data of an instrument with other instruments.
+Correlation and turnover structures of the input data are preserved mostly.
+4. Example
+size_bucket = round(multiply(cs_rank(cap), 10.))
+group_change = ts_diff(size_bucket, 1)
