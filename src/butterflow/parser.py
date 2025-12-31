@@ -1,6 +1,6 @@
 import re
 from typing import List
-from .typesystem import Atomic, Generic
+from butterflow.typesystem import Atomic, Generic
 
 # ==========================================
 # PHASE 2: Lexer & Parser (AST Generation)

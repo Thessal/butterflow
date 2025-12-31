@@ -1,4 +1,4 @@
-from .operators import Node
+from butterflow.operators import Node
 
 
 class Runtime:

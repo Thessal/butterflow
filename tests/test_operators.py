@@ -1,8 +1,8 @@
-import sys # noqa
-sys.path.append("./src/butterflow") # noqa
+#import sys # noqa
+#sys.path.append("./src/butterflow") # noqa
 
 import pytest
-from operators import STD_LIB, STD_LIB_IMPL, Operator, Either, Generic, Atomic
+from butterflow.operators import STD_LIB, STD_LIB_IMPL, Operator, Either, Generic, Atomic
 import itertools
 import numpy as np
 

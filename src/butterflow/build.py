@@ -1,6 +1,6 @@
-from .parser import FuncDef, Assign, Literal, Stmt, VarRef, Block, Call
+from butterflow.parser import FuncDef, Assign, Literal, Stmt, VarRef, Block, Call
 from typing import List
-from .operators import STD_LIB, STD_LIB_IMPL
+from butterflow.operators import STD_LIB, STD_LIB_IMPL
 
 # ==========================================
 # PHASE 4: Graph Builder (Python Classes)

@@ -1,8 +1,8 @@
 import re
 from typing import List, Dict, Union, Any, Optional
-from .typesystem import Atomic, Generic, DictType, TupleType, Type
-from .operators import STD_LIB
-from .parser import FuncDef, Assign, Literal, VarRef, Block, Call
+from butterflow.typesystem import Atomic, Generic, DictType, TupleType, Type
+from butterflow.operators import STD_LIB
+from butterflow.parser import FuncDef, Assign, Literal, VarRef, Block, Call
 
 # ==========================================
 # PHASE 3: Type Checking (Pre-Graph)
