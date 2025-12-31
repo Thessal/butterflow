@@ -1,4 +1,4 @@
-from typesystem import Operator, Atomic, Generic, DictType, Either
+from butterflow.typesystem import Operator, Atomic, Generic, DictType, Either
 import numpy as np
 import scipy
 from bisect import bisect_left, bisect_right, insort
