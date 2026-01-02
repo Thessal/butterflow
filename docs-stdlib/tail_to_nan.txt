@@ -1,0 +1,11 @@
+[Operator specifiation for tail_to_nan]
+1. Type signature
+tail_to_nan: Signal<Float> (signal: Either(Signal<Float>, Float), lower: Float, upper: Float)
+2. Arguments
+x: Input signal.
+lower: lower bound.
+upper: upper bound. 
+3. Semantic Definition
+Replace tails into nan, to assure the value range.
+4. Example
+rank_value = tail_to_nan(signal=rank_noisy, lower=0., upper=1.)

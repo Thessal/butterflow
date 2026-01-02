@@ -18,7 +18,7 @@ volume_level : Signal<Float> = divide(dividend=volume, divisor=adv20)
 
 # Function definition
 dynamic_ma(signal: Signal<Float>, lookback: Signal<Float>, multiplier: Signal<Float>) : Signal<Float> = {
-lb : Signal<Float> = multiply ( baseline = lookback, multiplier = multiplier )
+lb : Signal<Float> = multiply ( x = lookback, y = multiplier )
 result : Signal<Float> = ts_mean(signal = signal, period = lb)
 }
 

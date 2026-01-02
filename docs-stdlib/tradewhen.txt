@@ -1,0 +1,16 @@
+[Operator specifiation for tradewhen]
+1. Type signature
+tradewhen: Signal<Float> (signal: Signal<Float>, enter: Either(Signal<Float>,Int), exit: Either(Signal<Float>,Int), period: Int)
+2. Arguments
+signal: Input signal.
+enter: Enter signal. Triggered when value is positive.
+exit: Exit signal. Triggered when value is positive.
+period: Lookback window. Integer greater than 1. At least 64 is recommended for stability.
+3. Semantic Definition
+Updates output position into the input signal, when enter signal is greater than zero.
+Updated signal is forward-filled until the exit signal is triggered.
+Reduces turnover and changes rank significantly. Too much tradewhen can result noisy output.
+4. Example
+vol_event = subtract(ts_zscore(signal=return, period=64.), y=2.)
+volume_exit = subtract(x=ts_rank(signal=volume, period=21), y=0.8)
+position = tradewhen(signal=raw_signal, enter=vol_event, exit=volume_exit, period=64)

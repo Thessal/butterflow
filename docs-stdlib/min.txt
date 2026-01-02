@@ -1,0 +1,11 @@
+[Operator specifiation for min]
+1. Type signature
+min: Signal<Float> (x: Either(Signal<Float>, Float), y: Either(Signal<Float>, Float))
+2. Arguments
+x: Input signal.
+y: Input signal.
+3. Semantic Definition
+Compares x and y, and outputs smaller value.
+4. Example
+loss = min(x=returns, y=0.)
+value_clip = min(x=raw_value, y=max_value)

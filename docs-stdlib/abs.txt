@@ -1,0 +1,9 @@
+[Operator specifiation for abs]
+1. Type signature
+abs: Signal<Float> (signal: Either(Signal<Float>, Float))
+2. Arguments
+signal: Input signal.
+3. Semantic Definition
+Calculate absolute value.
+4. Example
+volatility = ts_mean(signal=abs(signal=return), period=21)

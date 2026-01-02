@@ -1,0 +1,11 @@
+[Operator specifiation for max]
+1. Type signature
+max: Signal<Float> (x: Either(Signal<Float>, Float), y: Either(Signal<Float>, Float))
+2. Arguments
+x: Input signal.
+y: Input signal.
+3. Semantic Definition
+Compares x and y, and outputs larger value.
+4. Example
+profit = max(x=returns, y=0.)
+eps = divide(dividend=min(x=fundq_is_ebit, y=fundq_is_ebitda), divisor=max(x=sharesout, y=1.0))

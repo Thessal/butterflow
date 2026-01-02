@@ -1,0 +1,11 @@
+[Operator specifiation for clip]
+1. Type signature
+clip: Signal<Float> (signal: Either(Signal<Float>, Float), lower: Float, upper: Float)
+2. Arguments
+x: Input signal.
+lower: lower bound.
+upper: upper bound. 
+3. Semantic Definition
+Clip tails into boundary, to assure the value range.
+4. Example
+rank_value = clip(signal=rank_noisy, lower=0., upper=1.)

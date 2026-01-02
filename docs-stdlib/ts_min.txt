@@ -1,0 +1,10 @@
+[Operator specifiation for ts_min]
+1. Type signature
+ts_min: Signal<Float> (signal: Signal<Float>, period: Int)
+2. Arguments
+signal: Input signal.
+period: Lookback window. Integer greater than 1.
+3. Semantic Definition
+Returns minimum value over the observations in the period
+4. Example
+yoy_low = ts_min(signal=close, period=252)

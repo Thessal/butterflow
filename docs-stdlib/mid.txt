@@ -1,0 +1,10 @@
+[Operator specifiation for mid]
+1. Type signature
+mid: Signal<Float> (x: Either(Signal<Float>, Float), y: Either(Signal<Float>, Float))
+2. Arguments
+x: Input signal.
+y: Input signal.
+3. Semantic Definition
+Calculate average (x+y)*0.5
+4. Example
+mid_hl = mid(x=high, y=low)

@@ -1,10 +1,9 @@
 [Operator specifiation for divide]
 1. Type signature
-divide: Signal<Float> (dividend: Signal<Float>, divisor: Signal<Float>)
-divide: Signal<Float> (dividend: Signal<Float>, divisor: Float)
+divide: Signal<Float> (dividend: Either(Signal<Float>, Float), divisor: Either(Signal<Float>, Float))
 2. Arguments
 dividend: Input signal.
-divisor: Input signal or a floating point number literal. Nonzero value.
+divisor: Nonzero input signal.
 3. Semantic Definition
 Divides dividend by divisor.
 Useful for calculating financial ratios.

@@ -1,0 +1,11 @@
+[Operator specifiation for ts_mae]
+1. Type signature
+ts_mae: Signal<Float> (signal: Signal<Float>, period: Int)
+2. Arguments
+signal: Input signal.
+period: Lookback window. Integer greater than 1.
+3. Semantic Definition 
+Robust proxy of the historical volatility, based on mean average error.
+4. Example
+event = ts_mae(cs_rank(signal=volume), period=5)
+result = multiply(x=ts_rank(signal=price, period=5), y=event)

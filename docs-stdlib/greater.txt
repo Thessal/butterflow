@@ -1,0 +1,10 @@
+[Operator specifiation for greater]
+1. Type signature
+greater: Signal<Float> (signal: Either(Signal<Float>, Float), thres: Either(Signal<Float>, Float))
+2. Arguments
+signal: Input signal.
+thres: Input signal, or a number for threshold
+3. Semantic Definition
+Outputs 1.0 if the input signal is greater than the threshold 
+4. Example
+is_profit = greater(signal=return, thres=0.0)

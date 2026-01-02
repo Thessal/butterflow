@@ -2,8 +2,7 @@ from butterflow.typesystem import Operator, Atomic, Generic, DictType, Either
 import numpy as np
 import scipy
 from bisect import bisect_left, bisect_right, insort
-
-# TODO: argminmax / group
+from collections import deque
 
 # --- Define the Type Environment (The Rules) ---
 # Function signatures
@@ -23,6 +22,29 @@ STD_LIB = {
         Generic("Signal", Atomic("Float"))
     ),
 
+    "abs": Operator(
+        DictType({
+            "signal": Either([Generic("Signal", Atomic("Float")), Atomic("Float")])
+        }),
+        Generic("Signal", Atomic("Float"))
+    ),
+
+    "ts_delay": Operator(
+        DictType({
+            "signal": Generic("Signal", Atomic("Float")),
+            "period": Either([Generic("Signal", Atomic("Float")), Atomic("Int")])
+        }),
+        Generic("Signal", Atomic("Float"))
+    ),
+
+    "ts_diff": Operator(
+        DictType({
+            "signal": Generic("Signal", Atomic("Float")),
+            "period": Either([Generic("Signal", Atomic("Float")), Atomic("Int")])
+        }),
+        Generic("Signal", Atomic("Float"))
+    ),
+
     "ts_mean": Operator(
         DictType({
             "signal": Generic("Signal", Atomic("Float")),
@@ -31,7 +53,39 @@ STD_LIB = {
         Generic("Signal", Atomic("Float"))
     ),
 
+    "ts_sum": Operator(
+        DictType({
+            "signal": Generic("Signal", Atomic("Float")),
+            "period": Either([Generic("Signal", Atomic("Float")), Atomic("Int")])
+        }),
+        Generic("Signal", Atomic("Float"))
+    ),
+
+    "ts_decay_linear": Operator(
+        DictType({
+            "signal": Generic("Signal", Atomic("Float")),
+            "period": Either([Generic("Signal", Atomic("Float")), Atomic("Int")])
+        }),
+        Generic("Signal", Atomic("Float"))
+    ),
+
+    "ts_decay_exp": Operator(
+        DictType({
+            "signal": Generic("Signal", Atomic("Float")),
+            "period": Either([Generic("Signal", Atomic("Float")), Atomic("Int")])
+        }),
+        Generic("Signal", Atomic("Float"))
+    ),
+
     "ts_std": Operator(
+        DictType({
+            "signal": Generic("Signal", Atomic("Float")),
+            "period": Atomic("Int")
+        }),
+        Generic("Signal", Atomic("Float"))
+    ),
+
+    "ts_mae": Operator(
         DictType({
             "signal": Generic("Signal", Atomic("Float")),
             "period": Atomic("Int")
@@ -55,10 +109,69 @@ STD_LIB = {
         Generic("Signal", Atomic("Float"))
     ),
 
+    "ts_min": Operator(
+        DictType({
+            "signal": Generic("Signal", Atomic("Float")),
+            "period": Atomic("Int")
+        }),
+        Generic("Signal", Atomic("Float"))
+    ),
+
+    "ts_max": Operator(
+        DictType({
+            "signal": Generic("Signal", Atomic("Float")),
+            "period": Atomic("Int")
+        }),
+        Generic("Signal", Atomic("Float"))
+    ),
+
+    "ts_argmin": Operator(
+        DictType({
+            "signal": Generic("Signal", Atomic("Float")),
+            "period": Atomic("Int")
+        }),
+        Generic("Signal", Atomic("Float"))
+    ),
+
+    "ts_argmax": Operator(
+        DictType({
+            "signal": Generic("Signal", Atomic("Float")),
+            "period": Atomic("Int")
+        }),
+        Generic("Signal", Atomic("Float"))
+    ),
+
+    "ts_argminmax": Operator(
+        DictType({
+            "signal": Generic("Signal", Atomic("Float")),
+            "period": Atomic("Int")
+        }),
+        Generic("Signal", Atomic("Float"))
+    ),
+
     "ts_ffill": Operator(
         DictType({
             "signal": Generic("Signal", Atomic("Float")),
             "period": Atomic("Int")
+        }),
+        Generic("Signal", Atomic("Float"))
+    ),
+
+    "tradewhen": Operator(
+        DictType({
+            "signal": Generic("Signal", Atomic("Float")),
+            "enter": Either([Generic("Signal", Atomic("Float")), Atomic("Float")]),
+            "exit": Either([Generic("Signal", Atomic("Float")), Atomic("Float")]),
+            "period": Atomic("Int")
+        }),
+        Generic("Signal", Atomic("Float"))
+    ),
+
+    "where": Operator(
+        DictType({
+            "condition": Generic("Signal", Atomic("Float")),
+            "val_true": Either([Generic("Signal", Atomic("Float")), Atomic("Float")]),
+            "val_false": Either([Generic("Signal", Atomic("Float")), Atomic("Float")]),
         }),
         Generic("Signal", Atomic("Float"))
     ),
@@ -79,7 +192,15 @@ STD_LIB = {
 
     "add": Operator(
         DictType({
-            "x": Generic("Signal", Atomic("Float")),
+            "x": Either([Generic("Signal", Atomic("Float")), Atomic("Float")]),
+            "y": Either([Generic("Signal", Atomic("Float")), Atomic("Float")]),
+        }),
+        Generic("Signal", Atomic("Float"))
+    ),
+
+    "mid": Operator(
+        DictType({
+            "x": Either([Generic("Signal", Atomic("Float")), Atomic("Float")]),
             "y": Either([Generic("Signal", Atomic("Float")), Atomic("Float")]),
         }),
         Generic("Signal", Atomic("Float"))
@@ -87,7 +208,7 @@ STD_LIB = {
 
     "subtract": Operator(
         DictType({
-            "x": Generic("Signal", Atomic("Float")),
+            "x": Either([Generic("Signal", Atomic("Float")), Atomic("Float")]),
             "y": Either([Generic("Signal", Atomic("Float")), Atomic("Float")]),
         }),
         Generic("Signal", Atomic("Float"))
@@ -95,7 +216,7 @@ STD_LIB = {
 
     "divide": Operator(
         DictType({
-            "dividend": Generic("Signal", Atomic("Float")),
+            "dividend": Either([Generic("Signal", Atomic("Float")), Atomic("Float")]),
             "divisor": Either([Generic("Signal", Atomic("Float")), Atomic("Float")]),
         }),
         Generic("Signal", Atomic("Float"))
@@ -103,8 +224,58 @@ STD_LIB = {
 
     "multiply": Operator(
         DictType({
-            "baseline": Generic("Signal", Atomic("Float")),
-            "multiplier": Either([Generic("Signal", Atomic("Float")), Atomic("Float")])
+            "x": Either([Generic("Signal", Atomic("Float")), Atomic("Float")]),
+            "y": Either([Generic("Signal", Atomic("Float")), Atomic("Float")])
+        }),
+        Generic("Signal", Atomic("Float"))
+    ),
+
+    "greater": Operator(
+        DictType({
+            "signal": Either([Generic("Signal", Atomic("Float")), Atomic("Float")]),
+            "thres": Either([Generic("Signal", Atomic("Float")), Atomic("Float")]),
+        }),
+        Generic("Signal", Atomic("Float"))
+    ),
+
+    "less": Operator(
+        DictType({
+            "signal": Either([Generic("Signal", Atomic("Float")), Atomic("Float")]),
+            "thres": Either([Generic("Signal", Atomic("Float")), Atomic("Float")]),
+        }),
+        Generic("Signal", Atomic("Float"))
+    ),
+
+    "min": Operator(
+        DictType({
+            "x": Either([Generic("Signal", Atomic("Float")), Atomic("Float")]),
+            "y": Either([Generic("Signal", Atomic("Float")), Atomic("Float")]),
+        }),
+        Generic("Signal", Atomic("Float"))
+    ),
+
+    "max": Operator(
+        DictType({
+            "x": Either([Generic("Signal", Atomic("Float")), Atomic("Float")]),
+            "y": Either([Generic("Signal", Atomic("Float")), Atomic("Float")]),
+        }),
+        Generic("Signal", Atomic("Float"))
+    ),
+
+    "clip": Operator(
+        DictType({
+            "signal": Either([Generic("Signal", Atomic("Float")), Atomic("Float")]),
+            "lower": Atomic("Float"),
+            "upper": Atomic("Float"),
+        }),
+        Generic("Signal", Atomic("Float"))
+    ),
+
+    "tail_to_nan": Operator(
+        DictType({
+            "signal": Either([Generic("Signal", Atomic("Float")), Atomic("Float")]),
+            "lower": Atomic("Float"),
+            "upper": Atomic("Float"),
         }),
         Generic("Signal", Atomic("Float"))
     ),
@@ -120,6 +291,54 @@ STD_LIB = {
 }
 
 
+def _check_ndarray(x, y, result, cache):
+    # Casts result into Signal<Float> when the both inputs are all Atomic
+    if type(x) != np.ndarray and type(y) != np.ndarray:
+        return STD_LIB_IMPL.const(value=float(result)).compute(cache=cache)
+    elif type(result) != np.ndarray:
+        raise Exception("Type casting exception (Atomic result to Signal)")
+    else:
+        return result
+
+
+def _convolve(signal, period, kernel_factory, average=True):
+    # signal: ndarray
+    # period: ndarray or integer
+    # if average=False, sum is calculated
+    n, p = signal.shape
+    valid = np.isfinite(signal)
+    input = np.zeros_like(signal, dtype=float)
+    input[valid] = signal[valid]
+    result = np.full_like(signal, np.nan, dtype=float)
+
+    if type(period) == int:
+        if 0 < period <= n:
+            # kernel = np.ones((period, 1), dtype=float)
+            kernel = kernel_factory(period)
+            sum = scipy.signal.convolve2d(input, kernel, mode='valid')
+            if average:
+                count = scipy.signal.convolve2d(
+                    valid, kernel, mode='valid')
+                count[count == 0] = np.nan
+                result[period - 1:] = sum / count
+            else:
+                result[period - 1:] = sum
+        return result
+    elif type(period) == np.ndarray:
+        assert signal.shape == period.shape
+        lookback = np.round(period).clip(min=0, max=n+1)
+        lookback = np.nan_to_num(
+            lookback, nan=0, posinf=0, neginf=0).astype(int)
+        lbs = [int(x) for x in np.unique(lookback)]
+        for lb in lbs:
+            mask = lookback == lb
+            result[mask] = _convolve(
+                signal, lb, kernel_factory, average=average)[mask]
+        return result
+    else:
+        raise Exception
+
+
 class Node:
     def __repr__(self):
         args = ", ".join(
@@ -132,26 +351,23 @@ class Node:
         kwargs = {kw: getattr(self, kw) for kw in kws}
         return kwargs
 
-    def compute(self, cache):
+    def compute(self, cache, flags=None):
         # Check cache
-        # cache_keys = repr(list(cache.keys()))
-        # print("cache_keys", cache_keys)
+        if not flags:
+            flags = dict()
         expr_str = repr(self)
         if cache and (expr_str in cache):
             return cache[expr_str]
 
         # Compute
         kwargs = dict()
-        # print(f"calculating {self.__class__.__name__}({self.get_kwargs()})")
         for kw, arg in self.get_kwargs().items():
             if issubclass(type(arg), Node):
                 kwargs[kw] = arg.compute(cache)
             else:
                 kwargs[kw] = arg
-            # print(f"Arg : {kw} = {type(kwargs[kw])}")
-        # kwargs = {k: v.compute() for k, v in self.get_args()}
         self.cache = cache
-        output = self._compute(**kwargs)
+        output = self._compute(**(kwargs | flags))
         if cache:
             cache[expr_str] = output
 
@@ -183,7 +399,39 @@ class STD_LIB_IMPL:
             close[:, :] = value
             return close
 
-    class ts_mean(Node):
+    class abs(Node):
+        def __init__(self, signal): self.signal = signal
+
+        def _compute(self, signal):
+            result = np.abs(signal)
+            return _check_ndarray(signal, None, result, self.cache)
+
+    class ts_delay(Node):
+        def __init__(
+                self, signal, period):
+            self.signal, self.period = signal, period
+
+        def _compute(self, signal, period):
+            n, p = signal.shape
+            result = np.full_like(signal, np.nan, dtype=float)
+            if type(period) == int:
+                if 0 <= period <= n:
+                    result[period:, :] = signal[0:n-period, :]
+                return result
+            elif type(period) == np.ndarray:
+                assert signal.shape == period.shape
+                lookback = np.round(period).clip(min=0, max=n+1)
+                lookback = np.nan_to_num(
+                    lookback, nan=n+1, posinf=n+1, neginf=0).astype(int)
+                lbs = [int(x) for x in np.unique(lookback)]
+                for lb in lbs:
+                    mask = lookback == lb
+                    result[mask] = self._compute(signal, lb)[mask]
+                return result
+            else:
+                raise Exception
+
+    class ts_diff(Node):
         def __init__(
                 self, signal, period):
             self.signal, self.period = signal, period
@@ -193,10 +441,8 @@ class STD_LIB_IMPL:
             result = np.full_like(signal, np.nan, dtype=float)
             if type(period) == int:
                 if 0 < period <= n:
-                    kernel = np.ones((period, 1), dtype=float) * \
-                        (1./float(period))
-                    result[period -
-                           1:] = scipy.signal.convolve2d(signal, kernel, mode='valid')
+                    result[period:, :] = signal[period:, :] - \
+                        signal[0:n-period, :]
                 return result
             elif type(period) == np.ndarray:
                 assert signal.shape == period.shape
@@ -211,6 +457,46 @@ class STD_LIB_IMPL:
             else:
                 raise Exception
 
+    class ts_mean(Node):
+        def __init__(
+                self, signal, period):
+            self.signal, self.period = signal, period
+
+        def _compute(self, signal, period):
+            def kernel_factory(period): return np.ones(
+                (period, 1), dtype=float)
+            return _convolve(signal, period, kernel_factory, average=True)
+
+    class ts_sum(Node):
+        def __init__(
+                self, signal, period):
+            self.signal, self.period = signal, period
+
+        def _compute(self, signal, period):
+            def kernel_factory(period): return np.ones(
+                (period, 1), dtype=float)
+            return _convolve(signal, period, kernel_factory, average=False)
+
+    class ts_decay_linear(Node):
+        def __init__(
+                self, signal, period):
+            self.signal, self.period = signal, period
+
+        def _compute(self, signal, period):
+            def kernel_factory(period): return np.linspace(
+                [1./period], [1.], num=period, dtype=float, axis=0)
+            return _convolve(signal, period, kernel_factory, average=True)
+
+    class ts_decay_exp(Node):
+        def __init__(
+                self, signal, period):
+            self.signal, self.period = signal, period
+
+        def _compute(self, signal, period):
+            def kernel_factory(period): return np.exp(
+                np.linspace([-3.], [0.], num=period, dtype=float, axis=0))
+            return _convolve(signal, period, kernel_factory, average=True)
+
     class ts_std(Node):
         def __init__(
                 self, signal, period):
@@ -222,7 +508,24 @@ class STD_LIB_IMPL:
             if type(period) == int:
                 if 0 < period <= n:
                     for p in range(period, n+1):
-                        result[p-1] = signal[p-period:p].std(axis=0)
+                        result[p-1] = np.nanstd(signal[p-period:p], axis=0)
+                return result
+            else:
+                raise Exception
+
+    class ts_mae(Node):
+        def __init__(
+                self, signal, period):
+            self.signal, self.period = signal, period
+
+        def _compute(self, signal, period):
+            n, p = signal.shape
+            result = np.full_like(signal, np.nan, dtype=float)
+            if type(period) == int:
+                if 0 < period <= n:
+                    for p in range(period, n+1):
+                        result[p-1] = np.nanmean(
+                            np.abs(signal[p-period:p] - np.nanmean(signal[p-period:p], axis=0)), axis=0)
                 return result
             else:
                 raise Exception
@@ -295,6 +598,98 @@ class STD_LIB_IMPL:
 
             return out
 
+    class ts_min(Node):
+        def __init__(self, signal, period):
+            self.signal, self.period = signal, period
+
+        def _compute(self, signal: np.ndarray, period: int, flip=False, argsort=False) -> np.ndarray:
+            """
+            Rolling minimum using monotonic deque (O(T * N))
+
+            NaN handling:
+            - NaNs are ignored
+            - Output is NaN iff all values in the window are NaN
+            """
+            x = np.asarray(signal, dtype=float)
+            T, N = x.shape
+            out = np.full((T, N), np.nan)
+
+            if period <= 0:
+                return out
+
+            # one deque + valid-count per column
+            deques = [deque() for _ in range(N)]  # stores (index, value)
+            valid_counts = np.zeros(N, dtype=int)
+
+            for t in range(T):
+                for j in range(N):
+                    v = x[t, j]
+                    dq = deques[j]
+
+                    # ---- remove expired index ----
+                    if dq and dq[0][0] <= t - period:
+                        dq.popleft()
+
+                    if t >= period and not np.isnan(x[t - period, j]):
+                        valid_counts[j] -= 1
+
+                    # ---- insert new value ----
+                    if not np.isnan(v):
+                        valid_counts[j] += 1
+                        if not flip:
+                            while dq and dq[-1][1] > v:
+                                dq.pop()
+                        else:
+                            while dq and dq[-1][1] < v:
+                                dq.pop()
+                        dq.append((t, v))
+
+                    # ---- read output ----
+                    if t >= period - 1 and valid_counts[j] > 0:
+                        if not argsort:
+                            out[t, j] = dq[0][1]
+                        else:
+                            out[t, j] = (dq[0][0] - (t - period + 1))/period
+
+            return out
+
+    class ts_max(Node):
+        def __init__(self, signal, period):
+            self.signal, self.period = signal, period
+
+        def _compute(self, signal: np.ndarray, period: int) -> np.ndarray:
+            # Rolling maximum using monotonic deque
+            return STD_LIB_IMPL.ts_min(signal=signal, period=period).compute(cache=self.cache, flags={"flip": True})
+
+    class ts_argmin(Node):
+        def __init__(
+                self, signal, period):
+            self.signal, self.period = signal, period
+
+        def _compute(self, signal, period):
+            return STD_LIB_IMPL.ts_min(signal=signal, period=period).compute(cache=self.cache, flags={"flip": False, "argsort": True})
+
+    class ts_argmax(Node):
+        def __init__(
+                self, signal, period):
+            self.signal, self.period = signal, period
+
+        def _compute(self, signal, period):
+            return STD_LIB_IMPL.ts_min(signal=signal, period=period).compute(cache=self.cache, flags={"flip": True, "argsort": True})
+
+    class ts_argminmax(Node):
+        def __init__(
+                self, signal, period):
+            self.signal, self.period = signal, period
+
+        def _compute(self, signal, period):
+            return (
+                STD_LIB_IMPL.ts_argmin(
+                    signal=signal, period=period).compute(cache=self.cache)
+                - STD_LIB_IMPL.ts_argmax(signal=signal,
+                                         period=period).compute(cache=self.cache)
+            )
+
     class ts_ffill(Node):
         def __init__(
                 self, signal, period):
@@ -303,6 +698,7 @@ class STD_LIB_IMPL:
         def _compute(self, signal: np.ndarray, period: int) -> np.ndarray:
             """
             NumPy implementation of pandas.DataFrame.ffill(limit=limit)
+            inf is processed as a valid number. (see tradewhen)
 
             Parameters
             ----------
@@ -342,6 +738,63 @@ class STD_LIB_IMPL:
 
             return out
 
+    class tradewhen(Node):
+        def __init__(
+                self, signal, enter, exit, period):
+            self.signal, self.enter, self.exit, self.period = signal, enter, exit, period
+
+        def _compute(self, signal: np.ndarray, enter, exit, period: int) -> np.ndarray:
+            """
+            Updates output to signal, when enter is positive. 
+            Keeps the value until the exit is positive.
+            When exit is positive, the value is discarded to nan
+            """
+            if type(enter) == np.ndarray:
+                enter_cond = enter > 0.
+            else:
+                enter_cond = np.full_like(signal, enter > 0., dtype=bool)
+            if type(exit) == np.ndarray:
+                exit_cond = exit > 0.
+            else:
+                exit_cond = np.full_like(signal, exit > 0., dtype=bool)
+            exit_cond &= exit_cond & (~enter_cond)
+
+            input = np.nan_to_num(
+                signal, copy=True, nan=np.nan, posinf=np.nan, neginf=np.nan)
+            input = np.where(enter_cond, input, np.nan)
+            # np.inf is used as exit marker
+            input = np.where(exit_cond, input, np.inf)
+
+            output = STD_LIB_IMPL.ts_ffill(
+                signal=input, period=period).compute(cache=self.cache)
+            output = np.nan_to_num(
+                signal, copy=False, nan=np.nan, posinf=np.nan, neginf=np.nan)
+
+            return output
+
+    class where(Node):
+        def __init__(
+                self, condition, val_true, val_false):
+            self.condition, self.val_true, self.val_false = condition, val_true, val_false
+
+        def _compute(self, condition: np.ndarray, val_true, val_false) -> np.ndarray:
+            """
+            Depending on the sign of the condition, use val_true or val_false.
+            When the condition is zero, the result is nan.
+            """
+            output = np.full_like(condition, np.nan, dtype=float)
+            mask_true = condition > 0
+            mask_false = condition < 0
+            if type(val_true) == np.ndarray:
+                output[mask_true] = val_true[mask_true]
+            else:
+                output[mask_true] = val_true
+            if type(val_false) == np.ndarray:
+                output[mask_false] = val_false[mask_false]
+            else:
+                output[mask_false] = val_false
+            return output
+
     class cs_rank(Node):
         def __init__(self, signal): self.signal = signal
 
@@ -353,7 +806,7 @@ class STD_LIB_IMPL:
             - na_option='keep'
             """
             x = np.asarray(signal, dtype=float)
-            out = np.full_like(x, np.nan)
+            out = np.full_like(x, np.nan, dtype=float)
 
             for i in range(x.shape[0]):
                 row = x[i]
@@ -392,7 +845,7 @@ class STD_LIB_IMPL:
 
         def _compute(self, signal: np.ndarray) -> np.ndarray:
             x = np.asarray(signal, dtype=float)
-            out = np.full_like(x, np.nan)
+            out = np.full_like(x, np.nan, dtype=float)
 
             for i in range(x.shape[0]):
                 row = x[i]
@@ -402,8 +855,8 @@ class STD_LIB_IMPL:
                 if vals.size == 0:
                     continue
 
-                mu = np.mean(vals)
-                sigma = np.std(vals)
+                mu = np.nanmean(vals)
+                sigma = np.nanstd(vals)
                 if sigma <= 0.:
                     sigma = np.nan
 
@@ -414,27 +867,100 @@ class STD_LIB_IMPL:
     class add(Node):
         def __init__(self, x, y): self.x, self.y = x, y
 
-        def _compute(self, x, y): return x + y
+        def _compute(self, x, y):
+            result = x + y
+            return _check_ndarray(x, y, result, self.cache)
+
+    class mid(Node):
+        def __init__(self, x, y): self.x, self.y = x, y
+
+        def _compute(self, x, y):
+            result = (x + y) * 0.5
+            return _check_ndarray(x, y, result, self.cache)
 
     class subtract(Node):
         def __init__(self, x, y): self.x, self.y = x, y
 
-        def _compute(self, x, y): return x - y
+        def _compute(self, x, y):
+            result = x - y
+            return _check_ndarray(x, y, result, self.cache)
 
     class divide(Node):
         def __init__(self, dividend,
                      divisor): self.dividend, self.divisor = dividend, divisor
         def _compute(self, dividend,
                      divisor):
-            return dividend / divisor
+            result = dividend / divisor
+            return _check_ndarray(dividend, divisor, result, self.cache)
 
     class multiply(Node):
-        def __init__(self, baseline,
-                     multiplier):
-            self.baseline, self.multiplier = baseline, multiplier
+        def __init__(self, x, y):
+            self.x, self.y = x, y
 
-        def _compute(self, baseline, multiplier):
-            return baseline * multiplier
+        def _compute(self, x, y):
+            result = x * y
+            return _check_ndarray(x, y, result, self.cache)
+
+    class greater(Node):
+        def __init__(self, signal, thres):
+            self.signal, self.thres = signal, thres
+
+        def _compute(self, signal, thres):
+            if type(signal) == np.ndarray or type(thres) == np.ndarray:
+                result = (signal > thres).astype(float)
+            else:
+                result = 1. if signal > thres else 0.
+            return _check_ndarray(signal, thres, result, self.cache)
+
+    class less(Node):
+        def __init__(self, signal, thres):
+            self.signal, self.thres = signal, thres
+
+        def _compute(self, signal, thres):
+            if type(signal) == np.ndarray or type(thres) == np.ndarray:
+                result = (signal < thres).astype(float)
+            else:
+                result = 1. if signal < thres else 0.
+            return _check_ndarray(signal, thres, result, self.cache)
+
+    class min(Node):
+        def __init__(self, x, y):
+            self.x, self.y = x, y
+
+        def _compute(self, x, y):
+            result = np.minimum(x, y)
+            return _check_ndarray(x, y, result, self.cache)
+
+    class max(Node):
+        def __init__(self, x, y):
+            self.x, self.y = x, y
+
+        def _compute(self, x, y):
+            result = np.maximum(x, y)
+            return _check_ndarray(x, y, result, self.cache)
+
+    class clip(Node):
+        def __init__(self, signal, lower, upper):
+            self.signal, self.lower, self.upper = signal, lower, upper
+
+        def _compute(self, signal, lower, upper):
+            result = np.clip(a=signal, a_min=lower, a_max=upper)
+            return _check_ndarray(signal, None, result, self.cache)
+
+    class tail_to_nan(Node):
+        def __init__(self, signal, lower, upper):
+            self.signal, self.lower, self.upper = signal, lower, upper
+
+        def _compute(self, signal, lower, upper):
+            if type(signal) == float:
+                result = signal if lower < signal < upper else float('nan')
+            elif type(signal) == np.ndarray:
+                result = np.full_like(signal, np.nan, dtype=float)
+                mask = (lower <= signal) & (signal <= upper)
+                result[mask] = signal[mask]
+            else:
+                raise Exception
+            return _check_ndarray(signal, None, result, self.cache)
 
     class covariance(Node):
         # TODO: shrinkage or regularization, neutralization, sector information etc.

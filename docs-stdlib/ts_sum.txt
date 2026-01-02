@@ -1,0 +1,11 @@
+[Operator specifiation for ts_sum]
+1. Type signature
+ts_sum: Signal<Float> (signal: Signal<Float>, period: Either(Signal<Float>,Int))
+2. Arguments
+signal: Unsmoothed input signal.
+period: Smoothing window. Positive value. Dynamic window is used when the type of period is a Signal. 
+3. Semantic Definition 
+Apply moving sum to the input signal by aggregating adjacent datapoints.
+NaN or Inf values are ignored and have same effect with zero.
+4. Example
+dividend_sum = ts_sum(signal=dividend, period=63)

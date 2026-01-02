@@ -1,10 +1,9 @@
 [Operator specifiation for add]
 1. Type signature
-add: Signal<Float> (x: Signal<Float>, y: Signal<Float>)
-add: Signal<Float> (x: Signal<Float>, y: Float)
+add: Signal<Float> (x: Either(Signal<Float>, Float), y: Either(Signal<Float>, Float))
 2. Arguments
 x: Input signal.
-y: Input signal or a floating point number literal
+y: Input signal.
 3. Semantic Definition
 Adds x and y.
 Information can be collected by adding two signal with same scale.

@@ -1,0 +1,11 @@
+[Operator specifiation for ts_delay]
+1. Type signature
+ts_delay: Signal<Float> (signal: Signal<Float>, period: Either(Signal<Float>,Int))
+2. Arguments
+signal: Input signal.
+period: Differentication window. Zero or positive value. Dynamic window is used when the type of period is a Signal. 
+3. Semantic Definition 
+Lags the time series input.
+4. Example
+no_update = less(signal=volume, thres=adv20)
+old_close = ts_delay(signal=close, period=no_update)

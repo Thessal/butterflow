@@ -1,0 +1,15 @@
+[Operator specifiation for where]
+1. Type signature
+where: Signal<Float> (condition: Signal<Float>, val_true: Either(Signal<Float>,Int), val_false: Either(Signal<Float>,Int))
+2. Arguments
+condition: condition signal. positive means true, negative means false, zero means nan.
+val_true: input signal, when the condition is true.
+val_false: input signal, when the condition is false.
+3. Semantic Definition
+Chooses val_true and val_false, based on the condition
+4. Example
+plus_dm : Signal<Float> = where(
+    condition = add(greater(signal=up_move, thres=down_move), greater(signal=up_move, thres=0.0)),
+    true_val  = up_move,
+    false_val = 0.0
+)

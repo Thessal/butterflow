@@ -1,0 +1,10 @@
+[Operator specifiation for max]
+1. Type signature
+ts_max: Signal<Float> (signal: Signal<Float>, period: Int)
+2. Arguments
+signal: Input signal.
+period: Lookback window. Integer greater than 1.
+3. Semantic Definition
+Returns mimumum value over the observations in the period 
+4. Example
+yoy_high = ts_max(signal=close, period=252)

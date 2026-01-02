@@ -1,0 +1,11 @@
+[Operator specifiation for ts_diff]
+1. Type signature
+ts_diff: Signal<Float> (signal: Signal<Float>, period: Either(Signal<Float>,Int))
+2. Arguments
+signal: Input signal.
+period: Differentication window. Positive value. Dynamic window is used when the type of period is a Signal. 
+3. Semantic Definition 
+Differenticate the time series input.
+4. Example
+price_return = ts_diff(signal=close, period=1)
+drawdown = ts_diff(signal=close, period=multiply(x=ts_argmax(signal=close, period=64), y=64.))

@@ -1,0 +1,11 @@
+[Operator specifiation for ts_argminmax]
+1. Type signature
+ts_argminmax: Signal<Float> (signal: Signal<Float>, period: Int)
+2. Arguments
+signal: Input signal.
+period: Lookback window. Integer greater than 1.
+3. Semantic Definition
+Measures trend using ts_argmin - ts_argmax. Normalized from -1 to 1.
+Aroon Oscillator is an implementation of this idea.
+4. Example
+trend = ts_argminmax(signal=close, period=252)

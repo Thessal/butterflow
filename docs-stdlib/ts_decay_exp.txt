@@ -1,0 +1,12 @@
+[Operator specifiation for ts_decay_exp]
+1. Type signature
+ts_decay_exp: Signal<Float> (signal: Signal<Float>, period: Either(Signal<Float>,Int))
+2. Arguments
+signal: Unsmoothed input signal.
+period: Smoothing window. Positive value. Dynamic window is used when the type of period is a Signal. 
+3. Semantic Definition 
+Apply moving average to the input signal by averaging adjacent datapoints, with exponentially decaying weight.
+Convolution of exponential kernel to the time series. Weight is decayed from 1 to e^{-3} \sim 0.082.
+Reduces turnover.
+4. Example
+accumulation = ts_decay_exp(signal=money_flow, period=63)
