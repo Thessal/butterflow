@@ -4,6 +4,8 @@ import scipy
 from bisect import bisect_left, bisect_right, insort
 from collections import deque
 
+# TODO: maybe we should use @singledispatch?
+
 # --- Define the Type Environment (The Rules) ---
 # Function signatures
 # Mapping function names to their Operator signatures based on your input
@@ -341,8 +343,10 @@ def _convolve(signal, period, kernel_factory, average=True):
 
 class Node:
     def __repr__(self):
+        # NOTE: function parameter does not start with underscore. 
+        # TODO: try something safer
         args = ", ".join(
-            f"{v}" for k, v in self.__dict__.items() if not k.startswith('_'))
+            f"{v}" for k, v in self.__dict__.items() if (not k.startswith('_')))
         return f"{self.__class__.__name__}({args})"
 
     def get_kwargs(self):
@@ -366,7 +370,7 @@ class Node:
                 kwargs[kw] = arg.compute(cache)
             else:
                 kwargs[kw] = arg
-        self.cache = cache
+        self._cache = cache # NOTE: non-parameter member variable have to be marked with underscore (see repr())
         output = self._compute(**(kwargs | flags))
         if cache:
             cache[expr_str] = output
@@ -395,7 +399,7 @@ class STD_LIB_IMPL:
         def __repr__(self): return f'const("{self.value}")'
 
         def _compute(self, value):
-            close = STD_LIB_IMPL.data(id="close").compute(cache=self.cache)
+            close = STD_LIB_IMPL.data(id="close").compute(cache=self._cache)
             close[:, :] = value
             return close
 
@@ -404,7 +408,7 @@ class STD_LIB_IMPL:
 
         def _compute(self, signal):
             result = np.abs(signal)
-            return _check_ndarray(signal, None, result, self.cache)
+            return _check_ndarray(signal, None, result, self._cache)
 
     class ts_delay(Node):
         def __init__(
@@ -538,11 +542,11 @@ class STD_LIB_IMPL:
         def _compute(self, signal, period):
             if type(period) == int:
                 mu = STD_LIB_IMPL.ts_mean(
-                    signal=signal, period=period).compute(self.cache)
+                    signal=signal, period=period).compute(self._cache)
                 sigm = STD_LIB_IMPL.ts_std(
-                    signal=signal, period=period).compute(self.cache)
+                    signal=signal, period=period).compute(self._cache)
                 z = STD_LIB_IMPL.divide(
-                    dividend=signal-mu, divisor=sigm).compute(self.cache)
+                    dividend=signal-mu, divisor=sigm).compute(self._cache)
                 return z
             else:
                 raise Exception
@@ -659,7 +663,7 @@ class STD_LIB_IMPL:
 
         def _compute(self, signal: np.ndarray, period: int) -> np.ndarray:
             # Rolling maximum using monotonic deque
-            return STD_LIB_IMPL.ts_min(signal=signal, period=period).compute(cache=self.cache, flags={"flip": True})
+            return STD_LIB_IMPL.ts_min(signal=signal, period=period).compute(cache=self._cache, flags={"flip": True})
 
     class ts_argmin(Node):
         def __init__(
@@ -667,7 +671,7 @@ class STD_LIB_IMPL:
             self.signal, self.period = signal, period
 
         def _compute(self, signal, period):
-            return STD_LIB_IMPL.ts_min(signal=signal, period=period).compute(cache=self.cache, flags={"flip": False, "argsort": True})
+            return STD_LIB_IMPL.ts_min(signal=signal, period=period).compute(cache=self._cache, flags={"flip": False, "argsort": True})
 
     class ts_argmax(Node):
         def __init__(
@@ -675,7 +679,7 @@ class STD_LIB_IMPL:
             self.signal, self.period = signal, period
 
         def _compute(self, signal, period):
-            return STD_LIB_IMPL.ts_min(signal=signal, period=period).compute(cache=self.cache, flags={"flip": True, "argsort": True})
+            return STD_LIB_IMPL.ts_min(signal=signal, period=period).compute(cache=self._cache, flags={"flip": True, "argsort": True})
 
     class ts_argminmax(Node):
         def __init__(
@@ -685,9 +689,9 @@ class STD_LIB_IMPL:
         def _compute(self, signal, period):
             return (
                 STD_LIB_IMPL.ts_argmin(
-                    signal=signal, period=period).compute(cache=self.cache)
+                    signal=signal, period=period).compute(cache=self._cache)
                 - STD_LIB_IMPL.ts_argmax(signal=signal,
-                                         period=period).compute(cache=self.cache)
+                                         period=period).compute(cache=self._cache)
             )
 
     class ts_ffill(Node):
@@ -766,7 +770,7 @@ class STD_LIB_IMPL:
             input = np.where(exit_cond, input, np.inf)
 
             output = STD_LIB_IMPL.ts_ffill(
-                signal=input, period=period).compute(cache=self.cache)
+                signal=input, period=period).compute(cache=self._cache)
             output = np.nan_to_num(
                 signal, copy=False, nan=np.nan, posinf=np.nan, neginf=np.nan)
 
@@ -869,21 +873,21 @@ class STD_LIB_IMPL:
 
         def _compute(self, x, y):
             result = x + y
-            return _check_ndarray(x, y, result, self.cache)
+            return _check_ndarray(x, y, result, self._cache)
 
     class mid(Node):
         def __init__(self, x, y): self.x, self.y = x, y
 
         def _compute(self, x, y):
             result = (x + y) * 0.5
-            return _check_ndarray(x, y, result, self.cache)
+            return _check_ndarray(x, y, result, self._cache)
 
     class subtract(Node):
         def __init__(self, x, y): self.x, self.y = x, y
 
         def _compute(self, x, y):
             result = x - y
-            return _check_ndarray(x, y, result, self.cache)
+            return _check_ndarray(x, y, result, self._cache)
 
     class divide(Node):
         def __init__(self, dividend,
@@ -891,7 +895,7 @@ class STD_LIB_IMPL:
         def _compute(self, dividend,
                      divisor):
             result = dividend / divisor
-            return _check_ndarray(dividend, divisor, result, self.cache)
+            return _check_ndarray(dividend, divisor, result, self._cache)
 
     class multiply(Node):
         def __init__(self, x, y):
@@ -899,7 +903,7 @@ class STD_LIB_IMPL:
 
         def _compute(self, x, y):
             result = x * y
-            return _check_ndarray(x, y, result, self.cache)
+            return _check_ndarray(x, y, result, self._cache)
 
     class greater(Node):
         def __init__(self, signal, thres):
@@ -910,7 +914,7 @@ class STD_LIB_IMPL:
                 result = (signal > thres).astype(float)
             else:
                 result = 1. if signal > thres else 0.
-            return _check_ndarray(signal, thres, result, self.cache)
+            return _check_ndarray(signal, thres, result, self._cache)
 
     class less(Node):
         def __init__(self, signal, thres):
@@ -921,7 +925,7 @@ class STD_LIB_IMPL:
                 result = (signal < thres).astype(float)
             else:
                 result = 1. if signal < thres else 0.
-            return _check_ndarray(signal, thres, result, self.cache)
+            return _check_ndarray(signal, thres, result, self._cache)
 
     class min(Node):
         def __init__(self, x, y):
@@ -929,7 +933,7 @@ class STD_LIB_IMPL:
 
         def _compute(self, x, y):
             result = np.minimum(x, y)
-            return _check_ndarray(x, y, result, self.cache)
+            return _check_ndarray(x, y, result, self._cache)
 
     class max(Node):
         def __init__(self, x, y):
@@ -937,7 +941,7 @@ class STD_LIB_IMPL:
 
         def _compute(self, x, y):
             result = np.maximum(x, y)
-            return _check_ndarray(x, y, result, self.cache)
+            return _check_ndarray(x, y, result, self._cache)
 
     class clip(Node):
         def __init__(self, signal, lower, upper):
@@ -945,7 +949,7 @@ class STD_LIB_IMPL:
 
         def _compute(self, signal, lower, upper):
             result = np.clip(a=signal, a_min=lower, a_max=upper)
-            return _check_ndarray(signal, None, result, self.cache)
+            return _check_ndarray(signal, None, result, self._cache)
 
     class tail_to_nan(Node):
         def __init__(self, signal, lower, upper):
@@ -960,7 +964,7 @@ class STD_LIB_IMPL:
                 result[mask] = signal[mask]
             else:
                 raise Exception
-            return _check_ndarray(signal, None, result, self.cache)
+            return _check_ndarray(signal, None, result, self._cache)
 
     class covariance(Node):
         # TODO: shrinkage or regularization, neutralization, sector information etc.
