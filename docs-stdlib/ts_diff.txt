@@ -1,6 +1,6 @@
 [Operator specifiation for ts_diff]
 1. Type signature
-ts_diff: Signal<Float> (signal: Signal<Float>, period: Either(Signal<Float>,Int))
+ts_diff: Signal<Float> (signal: Signal<Float>, period: Signal<Float> or Int)
 2. Arguments
 signal: Input signal.
 period: Differentication window. Positive value. Dynamic window is used when the type of period is a Signal. 

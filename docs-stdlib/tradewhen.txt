@@ -1,6 +1,6 @@
 [Operator specifiation for tradewhen]
 1. Type signature
-tradewhen: Signal<Float> (signal: Signal<Float>, enter: Either(Signal<Float>,Int), exit: Either(Signal<Float>,Int), period: Int)
+tradewhen: Signal<Float> (signal: Signal<Float>, enter: Signal<Float> or Int, exit: Signal<Float> or Int, period: Int)
 2. Arguments
 signal: Input signal.
 enter: Enter signal. Triggered when value is positive.

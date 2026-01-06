@@ -1,6 +1,6 @@
 [Operator specifiation for ts_sum]
 1. Type signature
-ts_sum: Signal<Float> (signal: Signal<Float>, period: Either(Signal<Float>,Int))
+ts_sum: Signal<Float> (signal: Signal<Float>, period: Signal<Float> or Int)
 2. Arguments
 signal: Unsmoothed input signal.
 period: Smoothing window. Positive value. Dynamic window is used when the type of period is a Signal. 

@@ -1,6 +1,6 @@
 [Operator specifiation for less]
 1. Type signature
-less: Signal<Float> (signal: Either(Signal<Float>, Float), thres: Either(Signal<Float>, Float))
+less: Signal<Float> (signal: Signal<Float> or Float, thres: Signal<Float> or Float)
 2. Arguments
 signal: Input signal.
 thres: Input signal, or a number for threshold

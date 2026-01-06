@@ -1,6 +1,6 @@
 [Operator specifiation for multiply]
 1. Type signature
-multiply: Signal<Float> (x: Either(Signal<Float>, Float), y: Either(Signal<Float>, Float))
+multiply: Signal<Float> (x: Signal<Float> or Float, y: Signal<Float> or Float)
 2. Arguments
 x: Input signal.
 y: Input signal.

@@ -1,6 +1,6 @@
 [Operator specifiation for mid]
 1. Type signature
-mid: Signal<Float> (x: Either(Signal<Float>, Float), y: Either(Signal<Float>, Float))
+mid: Signal<Float> (x: Signal<Float> or Float, y: Signal<Float> or Float)
 2. Arguments
 x: Input signal.
 y: Input signal.

@@ -1,6 +1,6 @@
 [Operator specifiation for add]
 1. Type signature
-add: Signal<Float> (x: Either(Signal<Float>, Float), y: Either(Signal<Float>, Float))
+add: Signal<Float> (x: Signal<Float> or Float, y: Signal<Float> or Float)
 2. Arguments
 x: Input signal.
 y: Input signal.

@@ -1,6 +1,6 @@
 [Operator specifiation for divide]
 1. Type signature
-divide: Signal<Float> (dividend: Either(Signal<Float>, Float), divisor: Either(Signal<Float>, Float))
+divide: Signal<Float> (dividend: Signal<Float> or Float, divisor: Signal<Float> or Float)
 2. Arguments
 dividend: Input signal.
 divisor: Nonzero input signal.

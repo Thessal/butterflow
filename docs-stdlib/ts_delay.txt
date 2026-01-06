@@ -1,6 +1,6 @@
 [Operator specifiation for ts_delay]
 1. Type signature
-ts_delay: Signal<Float> (signal: Signal<Float>, period: Either(Signal<Float>,Int))
+ts_delay: Signal<Float> (signal: Signal<Float>, period: Signal<Float> or Int)
 2. Arguments
 signal: Input signal.
 period: Differentication window. Zero or positive value. Dynamic window is used when the type of period is a Signal. 

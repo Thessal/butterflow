@@ -1,6 +1,6 @@
 [Operator specifiation for subtract]
 1. Type signature
-subtract: Signal<Float> (x: Either(Signal<Float>, Float), y: Either(Signal<Float>, Float))
+subtract: Signal<Float> (x: Signal<Float> or Float, y: Signal<Float> or Float)
 2. Arguments
 x: Input signal.
 y: Input signal.

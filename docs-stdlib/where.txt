@@ -1,6 +1,6 @@
 [Operator specifiation for where]
 1. Type signature
-where: Signal<Float> (condition: Signal<Float>, val_true: Either(Signal<Float>,Int), val_false: Either(Signal<Float>,Int))
+where: Signal<Float> (condition: Signal<Float>, val_true: Signal<Float> or Int, val_false: Signal<Float> or Int)
 2. Arguments
 condition: condition signal. positive means true, negative means false, zero means nan.
 val_true: input signal, when the condition is true.

@@ -1,6 +1,6 @@
 [Operator specifiation for max]
 1. Type signature
-max: Signal<Float> (x: Either(Signal<Float>, Float), y: Either(Signal<Float>, Float))
+max: Signal<Float> (x: Signal<Float> or Float, y: Signal<Float> or Float)
 2. Arguments
 x: Input signal.
 y: Input signal.

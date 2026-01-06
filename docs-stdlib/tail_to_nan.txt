@@ -1,6 +1,6 @@
 [Operator specifiation for tail_to_nan]
 1. Type signature
-tail_to_nan: Signal<Float> (signal: Either(Signal<Float>, Float), lower: Float, upper: Float)
+tail_to_nan: Signal<Float> (signal: Signal<Float> or Float, lower: Float, upper: Float)
 2. Arguments
 x: Input signal.
 lower: lower bound.
