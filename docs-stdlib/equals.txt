@@ -1,0 +1,10 @@
+[Operator specifiation for equals]
+1. Type signature
+equals: Signal<Float> (x: Signal<Float> or Float, y: Signal<Float> or Float)
+2. Arguments
+x: Input signal, or a number 
+y: Input signal, or a number 
+3. Semantic Definition
+Outputs 1.0 if x equals to y
+4. Example
+is_peak = equals(x=ts_max(signal=high,period=3), y=high)

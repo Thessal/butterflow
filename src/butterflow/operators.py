@@ -5,6 +5,8 @@ from bisect import bisect_left, bisect_right, insort
 from collections import deque
 
 # TODO: maybe we should use @singledispatch?
+# TODO: vector neutralization for 2SLS, bucket neutralization for CI
+# TODO: correl, corrline, irir
 
 # --- Define the Type Environment (The Rules) ---
 # Function signatures
@@ -228,6 +230,14 @@ STD_LIB = {
         DictType({
             "x": Either([Generic("Signal", Atomic("Float")), Atomic("Float")]),
             "y": Either([Generic("Signal", Atomic("Float")), Atomic("Float")])
+        }),
+        Generic("Signal", Atomic("Float"))
+    ),
+
+    "equals": Operator(
+        DictType({
+            "x": Either([Generic("Signal", Atomic("Float")), Atomic("Float")]),
+            "y": Either([Generic("Signal", Atomic("Float")), Atomic("Float")]),
         }),
         Generic("Signal", Atomic("Float"))
     ),
@@ -903,6 +913,17 @@ class STD_LIB_IMPL:
 
         def _compute(self, x, y):
             result = x * y
+            return _check_ndarray(x, y, result, self._cache)
+
+    class equals(Node):
+        def __init__(self, x, y):
+            self.x, self.y = x, y
+
+        def _compute(self, x, y):
+            if type(x) == np.ndarray or type(y) == np.ndarray:
+                result = (x == y).astype(float)
+            else:
+                result = 1. if x == y else 0.
             return _check_ndarray(x, y, result, self._cache)
 
     class greater(Node):
