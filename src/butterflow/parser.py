@@ -222,7 +222,7 @@ class Parser:
                 self.consume()
                 type_ann = self.parse_type()
             else:
-                type_ann = Generic("Signal", "Float")
+                type_ann = Generic("Signal", Atomic("Float"))
             target = (name, type_ann)
             self.consume(val='=')
             expr = self.parse_expr()
