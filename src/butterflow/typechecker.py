@@ -10,19 +10,21 @@ from butterflow.parser import FuncDef, Assign, Literal, VarRef, Block, Call
 
 
 class TypeChecker:
-    def __init__(self):
+    def __init__(self, silent=False):
         self.symbol_table = {}  # name -> Type
         self.func_signatures = STD_LIB.copy()
+        self.silent = silent
 
     def check(self, stmts):
-        print("Type Checking...")
+        if not self.silent:
+            print("Type Checking...")
         for stmt in stmts:
 
             if isinstance(stmt, FuncDef):
                 self.func_signatures[stmt.name] = stmt
                 # Check body with arguments injected into a temporary scope
                 inner_scope = {**self.symbol_table, **stmt.args}
-                inner_checker = TypeChecker()
+                inner_checker = TypeChecker(silent=self.silent)
                 inner_checker.symbol_table = inner_scope
                 # Assuming body is a Block which contains a list of Assigns
                 inner_checker.check(stmt.body.assigns)
@@ -50,7 +52,8 @@ class TypeChecker:
                 if isinstance(rhs_type, DictType) and name in rhs_type.fields:
                     actual_type = rhs_type.fields[name]
                 self.symbol_table[name] = actual_type
-                print(f"  [OK] {name} : {actual_type}")
+                if not self.silent:
+                    print(f"  [OK] {name} : {actual_type}")
 
     def infer_type(self, expr, scope) -> Type:
         if isinstance(expr, Literal):

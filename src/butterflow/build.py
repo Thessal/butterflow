@@ -27,14 +27,16 @@ def dump_scope(scope):
 
 
 class Builder:
-    def __init__(self):
+    def __init__(self, silent):
         self.scope = {}
         self.macros = {}
+        self.silent = silent
         # std_lib_nodes should be a dict of constructors, e.g., {'ADD': AddNode, ...}
         # self.std_lib = std_lib_nodes
 
     def build(self, stmts):
-        print("\nBuilding Graph...")
+        if not self.silent:
+            print("\nBuilding Graph...")
         dump_statements(stmts)
         for stmt in stmts:
             if isinstance(stmt, FuncDef):
