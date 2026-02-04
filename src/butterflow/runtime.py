@@ -36,15 +36,16 @@ class Runtime:
         if self.check_corruption:
             self.data_backup = {k:v.copy() for k,v in self.cache.items()}
 
-    def check_corruption(self):
-        assert(all(self.data_backup[k] == v for k,v in self.cache.items()))
+    def corruption_check(self):
+        for k,v in self.cache.items():
+            np.testing.assert_array_equal(self.data_backup[k], v)
 
     def run(self, node, cache=None):
         """
         Recursively evaluates a Node and its dependencies (Post-Order Traversal).
         """
         if self.check_corruption:
-            self.check_corruption()
+            self.corruption_check()
         # Memoization
         if cache is None:
             cache = self.cache
