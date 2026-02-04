@@ -410,8 +410,7 @@ class STD_LIB_IMPL:
 
         def _compute(self, value):
             close = STD_LIB_IMPL.data(id="close").compute(cache=self._cache)
-            close[:, :] = value
-            return close
+            return np.full_like(close, value, dtype=float)
 
     class abs(Node):
         def __init__(self, signal): self.signal = signal
@@ -777,12 +776,12 @@ class STD_LIB_IMPL:
                 signal, copy=True, nan=np.nan, posinf=np.nan, neginf=np.nan)
             input = np.where(enter_cond, input, np.nan)
             # np.inf is used as exit marker
-            input = np.where(exit_cond, input, np.inf)
+            input = np.where(exit_cond, np.inf, input)
 
             output = STD_LIB_IMPL.ts_ffill(
                 signal=input, period=period).compute(cache=self._cache)
             output = np.nan_to_num(
-                signal, copy=False, nan=np.nan, posinf=np.nan, neginf=np.nan)
+                output, copy=False, nan=np.nan, posinf=np.nan, neginf=np.nan)
 
             return output
 
