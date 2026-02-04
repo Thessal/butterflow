@@ -16,7 +16,7 @@ def check_expr(x):
 
 
 class Runtime:
-    def __init__(self, data=None, datadir=None):
+    def __init__(self, data=None, datadir=None, check_corruption=True):
         self.cache = {}
         if datadir:  # load all in datadir
             files = glob(f"{datadir}/*.npy")
@@ -32,11 +32,19 @@ class Runtime:
                 if not check_expr(k):
                     k = id_to_expr(k)
                 self.cache[k] = v
+        self.check_corruption = check_corruption
+        if self.check_corruption:
+            self.data_backup = {k:v.copy() for k,v in self.cache.items()}
+
+    def check_corruption(self):
+        assert(all(self.data_backup[k] == v for k,v in self.cache.items()))
 
     def run(self, node, cache=None):
         """
         Recursively evaluates a Node and its dependencies (Post-Order Traversal).
         """
+        if self.check_corruption:
+            self.check_corruption()
         # Memoization
         if cache is None:
             cache = self.cache
