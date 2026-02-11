@@ -1,0 +1,61 @@
+rsi(signal: Signal<Float>, lookback: Int) : Signal<Float> = {
+    # 1. price change
+    d   : Signal<Float> = ts_diff(signal = signal, period = 1)
+
+    # 2. gains / losses
+    g   : Signal<Float> = clip(signal = d, min = 0., max = 1e9)
+    l   : Signal<Float> = clip(signal = d, min = -1e9, max = 0.) # will 1e9 correctly parsed as float?
+
+    # 3. moving averages 
+    ag  : Signal<Float> = ts_decay_exp(signal = g, period = lookback)
+    al  : Signal<Float> = ts_decay_exp(signal = l, period = lookback)
+
+    # 4. relative strength
+    rs_ : Signal<Float> = divide(dividend = ag, divisor = al)
+
+    # 5. final RSI
+    rs1 : Signal<Float> = divide(dividend =1., divisor= add(x = rs_, y = 1.))
+    result : Signal<Float> = subtract(x = 1., y = rs1)
+}
+
+is_peak_d1(signal: Signal<Float>) : Signal<Float> = {
+    # Yesterday price peaked
+    result: Signal<Float> = equals(x=ts_max(signal=signal, period=3), y=ts_delay(signal=signal, period=1))
+}
+is_trough_d1(signal: Signal<Float>) : Signal<Float> = {
+    # Yesterday price troughed
+    result: Signal<Float> = equals(x=ts_min(signal=signal, period=3), y=ts_delay(signal=signal, period=1))
+}
+
+rsi_divergence(price: Signal<Float>, lookback: Int) : Signal<Float> = {
+    r : Signal<Float> = rsi(signal = price, lookback = lookback)
+
+    # 2. detect peaks / troughs
+    price_peak : Signal<Float> = is_peak_d1(signal=price)
+    rsi_peak   : Signal<Float> = is_peak_d1(signal=r)
+    price_trough : Signal<Float> = is_trough_d1(signal=price)
+    rsi_trough   : Signal<Float> = is_trough_d1(signal=r)
+
+    # 3. bearish divergence: higher price peak + lower RSI peak
+    bear_cond : Signal<Float> = and(
+        x = ts_diff(signal=price_peak, period=1),
+        y = not(signal = ts_diff(signal=rsi_peak, period=1))
+    )
+    bull_cond : Signal<Float> = and(
+        x = not(signal= ts_diff(signal=price_trough, period=1)),
+        y = ts_diff(signal=rsi_trough, period=1)
+    )
+
+    # 6. final label
+    result : Signal<Float> = where(
+        condition = bear_cond,
+        val_true = -1.,
+        val_false = where(
+            condition = bull_cond,
+            val_true = 1.,
+            val_false = 0.
+        )
+    )
+}
+
+result = rsi_divergence(price=data(id="close"), lookback=14)

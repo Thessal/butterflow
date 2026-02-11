@@ -1,0 +1,277 @@
+{
+  "nodes": [
+    {
+      "id": 0,
+      "op": "data",
+      "args": {
+        "id": "vol"
+      }
+    },
+    {
+      "id": 1,
+      "op": "data",
+      "args": {
+        "id": "high"
+      }
+    },
+    {
+      "id": 2,
+      "op": "data",
+      "args": {
+        "id": "low"
+      }
+    },
+    {
+      "id": 3,
+      "op": "data",
+      "args": {
+        "id": "close"
+      }
+    },
+    {
+      "id": 4,
+      "op": "const",
+      "args": {
+        "value": 14
+      }
+    },
+    {
+      "id": 5,
+      "op": "const",
+      "args": {
+        "value": 1e-10
+      }
+    },
+    {
+      "id": 6,
+      "op": "subtract",
+      "args": {
+        "x": 1,
+        "y": 3
+      }
+    },
+    {
+      "id": 7,
+      "op": "add",
+      "args": {
+        "y": 5,
+        "x": 6
+      }
+    },
+    {
+      "id": 8,
+      "op": "const",
+      "args": {
+        "value": 1e-10
+      }
+    },
+    {
+      "id": 9,
+      "op": "subtract",
+      "args": {
+        "x": 3,
+        "y": 2
+      }
+    },
+    {
+      "id": 10,
+      "op": "add",
+      "args": {
+        "y": 8,
+        "x": 9
+      }
+    },
+    {
+      "id": 11,
+      "op": "subtract",
+      "args": {
+        "x": 10,
+        "y": 7
+      }
+    },
+    {
+      "id": 12,
+      "op": "const",
+      "args": {
+        "value": 1e-10
+      }
+    },
+    {
+      "id": 13,
+      "op": "subtract",
+      "args": {
+        "y": 2,
+        "x": 1
+      }
+    },
+    {
+      "id": 14,
+      "op": "add",
+      "args": {
+        "y": 12,
+        "x": 13
+      }
+    },
+    {
+      "id": 15,
+      "op": "divide",
+      "args": {
+        "divisor": 14,
+        "dividend": 11
+      }
+    },
+    {
+      "id": 16,
+      "op": "multiply",
+      "args": {
+        "y": 0,
+        "x": 15
+      }
+    },
+    {
+      "id": 17,
+      "op": "ts_decay_linear",
+      "args": {
+        "period": 4,
+        "signal": 16
+      }
+    },
+    {
+      "id": 18,
+      "op": "data",
+      "args": {
+        "id": "high"
+      }
+    },
+    {
+      "id": 19,
+      "op": "data",
+      "args": {
+        "id": "low"
+      }
+    },
+    {
+      "id": 20,
+      "op": "data",
+      "args": {
+        "id": "volume"
+      }
+    },
+    {
+      "id": 21,
+      "op": "data",
+      "args": {
+        "id": "close"
+      }
+    },
+    {
+      "id": 22,
+      "op": "const",
+      "args": {
+        "value": 14
+      }
+    },
+    {
+      "id": 23,
+      "op": "const",
+      "args": {
+        "value": 1e-10
+      }
+    },
+    {
+      "id": 24,
+      "op": "subtract",
+      "args": {
+        "y": 21,
+        "x": 18
+      }
+    },
+    {
+      "id": 25,
+      "op": "add",
+      "args": {
+        "y": 23,
+        "x": 24
+      }
+    },
+    {
+      "id": 26,
+      "op": "const",
+      "args": {
+        "value": 1e-10
+      }
+    },
+    {
+      "id": 27,
+      "op": "subtract",
+      "args": {
+        "x": 21,
+        "y": 19
+      }
+    },
+    {
+      "id": 28,
+      "op": "add",
+      "args": {
+        "y": 26,
+        "x": 27
+      }
+    },
+    {
+      "id": 29,
+      "op": "subtract",
+      "args": {
+        "x": 28,
+        "y": 25
+      }
+    },
+    {
+      "id": 30,
+      "op": "const",
+      "args": {
+        "value": 1e-10
+      }
+    },
+    {
+      "id": 31,
+      "op": "subtract",
+      "args": {
+        "x": 18,
+        "y": 19
+      }
+    },
+    {
+      "id": 32,
+      "op": "add",
+      "args": {
+        "y": 30,
+        "x": 31
+      }
+    },
+    {
+      "id": 33,
+      "op": "divide",
+      "args": {
+        "dividend": 29,
+        "divisor": 32
+      }
+    },
+    {
+      "id": 34,
+      "op": "multiply",
+      "args": {
+        "y": 20,
+        "x": 33
+      }
+    },
+    {
+      "id": 35,
+      "op": "ts_decay_linear",
+      "args": {
+        "period": 22,
+        "signal": 34
+      }
+    }
+  ],
+  "result_id": 35
+}

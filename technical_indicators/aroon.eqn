@@ -1,0 +1,8 @@
+v5 = Graph Result
+----------------------------------------
+v0 = data(id="close")
+v1 = const(value=v14)
+v2 = ts_argminmax(period=v1, signal=v0)
+v3 = data(id="signal")
+v4 = const(value=v14)
+v5 = ts_argminmax(period=v4, signal=v3)

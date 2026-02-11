@@ -1,0 +1,59 @@
+op_assign = _{ "=" }
+op_colon = _{ ":" }
+op_lparen = _{ "(" }
+op_rparen = _{ ")" }
+op_lbrace = _{ "{" }
+op_rbrace = _{ "}" }
+op_comma = _{ "," }
+op_lt = _{ "<" }
+op_gt = _{ ">" }
+
+program = { SOI ~ stmt* ~ EOI }
+
+stmt = { func_def | assign }
+
+func_def = { 
+    ident ~ ( 
+        (op_lparen ~ args? ~ op_rparen ~ op_colon ~ type_def) | 
+        (op_colon ~ type_def ~ op_lparen ~ args? ~ op_rparen) 
+    ) ~ op_assign ~ (block | expr)
+}
+
+args = { arg ~ (op_comma ~ arg)* }
+arg = { ident ~ op_colon ~ type_def ~ (op_assign ~ literal)? }
+
+assign = { 
+    ident ~ (op_colon ~ type_def)? ~ op_assign ~ expr
+}
+
+type_def = { ident ~ (op_lt ~ type_def ~ op_gt)? }
+
+expr = { 
+    literal | 
+    call | 
+    var_ref | 
+    block 
+}
+
+literal = { float | int | bool | string }
+var_ref = { ident }
+call = { ident ~ op_lparen ~ call_args? ~ op_rparen }
+call_args = { call_arg ~ (op_comma ~ call_arg)* }
+call_arg = { (ident ~ (op_assign | op_colon))? ~ expr }
+
+block = { op_lbrace ~ (assign ~ (op_comma? ~ assign)*)? ~ op_comma? ~ op_rbrace }
+
+ident = @{ (ASCII_ALPHA | "_") ~ (ASCII_ALPHANUMERIC | "_")* }
+int = @{ "-"? ~ ASCII_DIGIT+ }
+// Support scientific notation (e.g. 1e9, 1.0e-3) and negative numbers
+float = @{ 
+    "-"? ~ (
+        (ASCII_DIGIT+ ~ "." ~ ASCII_DIGIT* ~ (("e" | "E") ~ "-"? ~ ASCII_DIGIT+)?) |
+        (ASCII_DIGIT+ ~ ("e" | "E") ~ "-"? ~ ASCII_DIGIT+)
+    )
+}
+bool = { "True" | "False" }
+string = @{ "\"" ~ (!"\"" ~ ANY)* ~ "\"" }
+
+WHITESPACE = _{ " " | "\t" | "\r" | "\n" }
+COMMENT = _{ ("//" | "#") ~ (!"\n" ~ ANY)* ~ "\n" }

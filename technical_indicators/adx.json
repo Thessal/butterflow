@@ -1,0 +1,661 @@
+{
+  "nodes": [
+    {
+      "id": 0,
+      "op": "data",
+      "args": {
+        "id": "close"
+      }
+    },
+    {
+      "id": 1,
+      "op": "data",
+      "args": {
+        "id": "high"
+      }
+    },
+    {
+      "id": 2,
+      "op": "data",
+      "args": {
+        "id": "low"
+      }
+    },
+    {
+      "id": 3,
+      "op": "const",
+      "args": {
+        "value": 14
+      }
+    },
+    {
+      "id": 4,
+      "op": "ts_diff",
+      "args": {
+        "signal": 1,
+        "period": 1
+      }
+    },
+    {
+      "id": 5,
+      "op": "ts_diff",
+      "args": {
+        "signal": 2,
+        "period": 1
+      }
+    },
+    {
+      "id": 6,
+      "op": "greater",
+      "args": {
+        "thres": 0.0,
+        "signal": 4
+      }
+    },
+    {
+      "id": 7,
+      "op": "greater",
+      "args": {
+        "signal": 4,
+        "thres": 5
+      }
+    },
+    {
+      "id": 8,
+      "op": "add",
+      "args": {
+        "y": 6,
+        "x": 7
+      }
+    },
+    {
+      "id": 9,
+      "op": "const",
+      "args": {
+        "value": 0.0
+      }
+    },
+    {
+      "id": 10,
+      "op": "where",
+      "args": {
+        "val_false": 9,
+        "condition": 8,
+        "val_true": 4
+      }
+    },
+    {
+      "id": 11,
+      "op": "ts_mean",
+      "args": {
+        "signal": 10,
+        "period": 3
+      }
+    },
+    {
+      "id": 12,
+      "op": "ts_delay",
+      "args": {
+        "period": 1,
+        "signal": 0
+      }
+    },
+    {
+      "id": 13,
+      "op": "subtract",
+      "args": {
+        "y": 2,
+        "x": 1
+      }
+    },
+    {
+      "id": 14,
+      "op": "subtract",
+      "args": {
+        "x": 1,
+        "y": 12
+      }
+    },
+    {
+      "id": 15,
+      "op": "abs",
+      "args": {
+        "signal": 14
+      }
+    },
+    {
+      "id": 16,
+      "op": "subtract",
+      "args": {
+        "y": 12,
+        "x": 2
+      }
+    },
+    {
+      "id": 17,
+      "op": "abs",
+      "args": {
+        "signal": 16
+      }
+    },
+    {
+      "id": 18,
+      "op": "max",
+      "args": {
+        "y": 17,
+        "x": 15
+      }
+    },
+    {
+      "id": 19,
+      "op": "max",
+      "args": {
+        "x": 13,
+        "y": 18
+      }
+    },
+    {
+      "id": 20,
+      "op": "ts_mean",
+      "args": {
+        "period": 3,
+        "signal": 19
+      }
+    },
+    {
+      "id": 21,
+      "op": "divide",
+      "args": {
+        "dividend": 11,
+        "divisor": 20
+      }
+    },
+    {
+      "id": 22,
+      "op": "ts_diff",
+      "args": {
+        "period": 1,
+        "signal": 1
+      }
+    },
+    {
+      "id": 23,
+      "op": "ts_diff",
+      "args": {
+        "signal": 2,
+        "period": 1
+      }
+    },
+    {
+      "id": 24,
+      "op": "less",
+      "args": {
+        "signal": 22,
+        "thres": 23
+      }
+    },
+    {
+      "id": 25,
+      "op": "greater",
+      "args": {
+        "thres": 0.0,
+        "signal": 23
+      }
+    },
+    {
+      "id": 26,
+      "op": "add",
+      "args": {
+        "y": 25,
+        "x": 24
+      }
+    },
+    {
+      "id": 27,
+      "op": "const",
+      "args": {
+        "value": 0.0
+      }
+    },
+    {
+      "id": 28,
+      "op": "where",
+      "args": {
+        "val_false": 27,
+        "val_true": 23,
+        "condition": 26
+      }
+    },
+    {
+      "id": 29,
+      "op": "ts_mean",
+      "args": {
+        "signal": 28,
+        "period": 3
+      }
+    },
+    {
+      "id": 30,
+      "op": "ts_delay",
+      "args": {
+        "signal": 0,
+        "period": 1
+      }
+    },
+    {
+      "id": 31,
+      "op": "subtract",
+      "args": {
+        "x": 1,
+        "y": 2
+      }
+    },
+    {
+      "id": 32,
+      "op": "subtract",
+      "args": {
+        "x": 1,
+        "y": 30
+      }
+    },
+    {
+      "id": 33,
+      "op": "abs",
+      "args": {
+        "signal": 32
+      }
+    },
+    {
+      "id": 34,
+      "op": "subtract",
+      "args": {
+        "y": 30,
+        "x": 2
+      }
+    },
+    {
+      "id": 35,
+      "op": "abs",
+      "args": {
+        "signal": 34
+      }
+    },
+    {
+      "id": 36,
+      "op": "max",
+      "args": {
+        "y": 35,
+        "x": 33
+      }
+    },
+    {
+      "id": 37,
+      "op": "max",
+      "args": {
+        "x": 31,
+        "y": 36
+      }
+    },
+    {
+      "id": 38,
+      "op": "ts_mean",
+      "args": {
+        "period": 3,
+        "signal": 37
+      }
+    },
+    {
+      "id": 39,
+      "op": "divide",
+      "args": {
+        "divisor": 38,
+        "dividend": 29
+      }
+    },
+    {
+      "id": 40,
+      "op": "ratio",
+      "args": {
+        "x": 21,
+        "y": 39
+      }
+    },
+    {
+      "id": 41,
+      "op": "ts_mean",
+      "args": {
+        "period": 3,
+        "signal": 40
+      }
+    },
+    {
+      "id": 42,
+      "op": "data",
+      "args": {
+        "id": "low"
+      }
+    },
+    {
+      "id": 43,
+      "op": "data",
+      "args": {
+        "id": "close"
+      }
+    },
+    {
+      "id": 44,
+      "op": "data",
+      "args": {
+        "id": "high"
+      }
+    },
+    {
+      "id": 45,
+      "op": "const",
+      "args": {
+        "value": 14
+      }
+    },
+    {
+      "id": 46,
+      "op": "ts_diff",
+      "args": {
+        "period": 1,
+        "signal": 44
+      }
+    },
+    {
+      "id": 47,
+      "op": "ts_diff",
+      "args": {
+        "signal": 42,
+        "period": 1
+      }
+    },
+    {
+      "id": 48,
+      "op": "greater",
+      "args": {
+        "signal": 46,
+        "thres": 0.0
+      }
+    },
+    {
+      "id": 49,
+      "op": "greater",
+      "args": {
+        "signal": 46,
+        "thres": 47
+      }
+    },
+    {
+      "id": 50,
+      "op": "add",
+      "args": {
+        "y": 48,
+        "x": 49
+      }
+    },
+    {
+      "id": 51,
+      "op": "const",
+      "args": {
+        "value": 0.0
+      }
+    },
+    {
+      "id": 52,
+      "op": "where",
+      "args": {
+        "val_false": 51,
+        "condition": 50,
+        "val_true": 46
+      }
+    },
+    {
+      "id": 53,
+      "op": "ts_mean",
+      "args": {
+        "signal": 52,
+        "period": 45
+      }
+    },
+    {
+      "id": 54,
+      "op": "ts_delay",
+      "args": {
+        "signal": 43,
+        "period": 1
+      }
+    },
+    {
+      "id": 55,
+      "op": "subtract",
+      "args": {
+        "y": 42,
+        "x": 44
+      }
+    },
+    {
+      "id": 56,
+      "op": "subtract",
+      "args": {
+        "y": 54,
+        "x": 44
+      }
+    },
+    {
+      "id": 57,
+      "op": "abs",
+      "args": {
+        "signal": 56
+      }
+    },
+    {
+      "id": 58,
+      "op": "subtract",
+      "args": {
+        "y": 54,
+        "x": 42
+      }
+    },
+    {
+      "id": 59,
+      "op": "abs",
+      "args": {
+        "signal": 58
+      }
+    },
+    {
+      "id": 60,
+      "op": "max",
+      "args": {
+        "x": 57,
+        "y": 59
+      }
+    },
+    {
+      "id": 61,
+      "op": "max",
+      "args": {
+        "x": 55,
+        "y": 60
+      }
+    },
+    {
+      "id": 62,
+      "op": "ts_mean",
+      "args": {
+        "signal": 61,
+        "period": 45
+      }
+    },
+    {
+      "id": 63,
+      "op": "divide",
+      "args": {
+        "dividend": 53,
+        "divisor": 62
+      }
+    },
+    {
+      "id": 64,
+      "op": "ts_diff",
+      "args": {
+        "period": 1,
+        "signal": 44
+      }
+    },
+    {
+      "id": 65,
+      "op": "ts_diff",
+      "args": {
+        "period": 1,
+        "signal": 42
+      }
+    },
+    {
+      "id": 66,
+      "op": "less",
+      "args": {
+        "thres": 65,
+        "signal": 64
+      }
+    },
+    {
+      "id": 67,
+      "op": "greater",
+      "args": {
+        "signal": 65,
+        "thres": 0.0
+      }
+    },
+    {
+      "id": 68,
+      "op": "add",
+      "args": {
+        "y": 67,
+        "x": 66
+      }
+    },
+    {
+      "id": 69,
+      "op": "const",
+      "args": {
+        "value": 0.0
+      }
+    },
+    {
+      "id": 70,
+      "op": "where",
+      "args": {
+        "condition": 68,
+        "val_true": 65,
+        "val_false": 69
+      }
+    },
+    {
+      "id": 71,
+      "op": "ts_mean",
+      "args": {
+        "signal": 70,
+        "period": 45
+      }
+    },
+    {
+      "id": 72,
+      "op": "ts_delay",
+      "args": {
+        "period": 1,
+        "signal": 43
+      }
+    },
+    {
+      "id": 73,
+      "op": "subtract",
+      "args": {
+        "y": 42,
+        "x": 44
+      }
+    },
+    {
+      "id": 74,
+      "op": "subtract",
+      "args": {
+        "x": 44,
+        "y": 72
+      }
+    },
+    {
+      "id": 75,
+      "op": "abs",
+      "args": {
+        "signal": 74
+      }
+    },
+    {
+      "id": 76,
+      "op": "subtract",
+      "args": {
+        "y": 72,
+        "x": 42
+      }
+    },
+    {
+      "id": 77,
+      "op": "abs",
+      "args": {
+        "signal": 76
+      }
+    },
+    {
+      "id": 78,
+      "op": "max",
+      "args": {
+        "x": 75,
+        "y": 77
+      }
+    },
+    {
+      "id": 79,
+      "op": "max",
+      "args": {
+        "x": 73,
+        "y": 78
+      }
+    },
+    {
+      "id": 80,
+      "op": "ts_mean",
+      "args": {
+        "signal": 79,
+        "period": 45
+      }
+    },
+    {
+      "id": 81,
+      "op": "divide",
+      "args": {
+        "dividend": 71,
+        "divisor": 80
+      }
+    },
+    {
+      "id": 82,
+      "op": "ratio",
+      "args": {
+        "y": 81,
+        "x": 63
+      }
+    },
+    {
+      "id": 83,
+      "op": "ts_mean",
+      "args": {
+        "signal": 82,
+        "period": 45
+      }
+    }
+  ],
+  "result_id": 83
+}

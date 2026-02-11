@@ -1,0 +1,89 @@
+{
+  "nodes": [
+    {
+      "id": 0,
+      "op": "data",
+      "args": {
+        "id": "prices"
+      }
+    },
+    {
+      "id": 1,
+      "op": "const",
+      "args": {
+        "value": 14
+      }
+    },
+    {
+      "id": 2,
+      "op": "ema",
+      "args": {
+        "signal": 0,
+        "period": 1
+      }
+    },
+    {
+      "id": 3,
+      "op": "ema",
+      "args": {
+        "signal": 2,
+        "period": 1
+      }
+    },
+    {
+      "id": 4,
+      "op": "ema",
+      "args": {
+        "signal": 3,
+        "period": 1
+      }
+    },
+    {
+      "id": 5,
+      "op": "const",
+      "args": {
+        "value": 3.0
+      }
+    },
+    {
+      "id": 6,
+      "op": "multiply",
+      "args": {
+        "x": 2,
+        "y": 5
+      }
+    },
+    {
+      "id": 7,
+      "op": "const",
+      "args": {
+        "value": 3.0
+      }
+    },
+    {
+      "id": 8,
+      "op": "multiply",
+      "args": {
+        "y": 7,
+        "x": 3
+      }
+    },
+    {
+      "id": 9,
+      "op": "subtract",
+      "args": {
+        "y": 8,
+        "x": 6
+      }
+    },
+    {
+      "id": 10,
+      "op": "add",
+      "args": {
+        "y": 4,
+        "x": 9
+      }
+    }
+  ],
+  "result_id": 10
+}

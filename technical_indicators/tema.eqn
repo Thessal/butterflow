@@ -1,0 +1,13 @@
+v10 = Graph Result
+----------------------------------------
+v0 = data(id="prices")
+v1 = const(value=v14)
+v2 = ema(period=v1, signal=v0)
+v3 = ema(period=v1, signal=v2)
+v4 = ema(period=v1, signal=v3)
+v5 = const(value=3.000000)
+v6 = multiply(x=v2, y=v5)
+v7 = const(value=3.000000)
+v8 = multiply(x=v3, y=v7)
+v9 = subtract(x=v6, y=v8)
+v10 = add(x=v9, y=v4)

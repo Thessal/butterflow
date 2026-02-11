@@ -1,0 +1,9 @@
+v6 = Graph Result
+----------------------------------------
+v0 = data(id="tp")
+v1 = data(id="volume")
+v2 = const(value=v14)
+v3 = multiply(x=v0, y=v1)
+v4 = ts_decay_linear(period=v2, signal=v3)
+v5 = ts_decay_linear(period=v2, signal=v1)
+v6 = divide(dividend=v4, divisor=v5)

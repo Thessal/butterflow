@@ -1,0 +1,58 @@
+{
+  "nodes": [
+    {
+      "id": 0,
+      "op": "data",
+      "args": {
+        "id": "tp"
+      }
+    },
+    {
+      "id": 1,
+      "op": "data",
+      "args": {
+        "id": "volume"
+      }
+    },
+    {
+      "id": 2,
+      "op": "const",
+      "args": {
+        "value": 14
+      }
+    },
+    {
+      "id": 3,
+      "op": "multiply",
+      "args": {
+        "y": 1,
+        "x": 0
+      }
+    },
+    {
+      "id": 4,
+      "op": "ts_decay_linear",
+      "args": {
+        "period": 2,
+        "signal": 3
+      }
+    },
+    {
+      "id": 5,
+      "op": "ts_decay_linear",
+      "args": {
+        "signal": 1,
+        "period": 2
+      }
+    },
+    {
+      "id": 6,
+      "op": "divide",
+      "args": {
+        "dividend": 4,
+        "divisor": 5
+      }
+    }
+  ],
+  "result_id": 6
+}

@@ -1,0 +1,49 @@
+{
+  "nodes": [
+    {
+      "id": 0,
+      "op": "data",
+      "args": {
+        "id": "close"
+      }
+    },
+    {
+      "id": 1,
+      "op": "const",
+      "args": {
+        "value": 14
+      }
+    },
+    {
+      "id": 2,
+      "op": "ts_argminmax",
+      "args": {
+        "period": 1,
+        "signal": 0
+      }
+    },
+    {
+      "id": 3,
+      "op": "data",
+      "args": {
+        "id": "signal"
+      }
+    },
+    {
+      "id": 4,
+      "op": "const",
+      "args": {
+        "value": 14
+      }
+    },
+    {
+      "id": 5,
+      "op": "ts_argminmax",
+      "args": {
+        "signal": 3,
+        "period": 4
+      }
+    }
+  ],
+  "result_id": 5
+}
